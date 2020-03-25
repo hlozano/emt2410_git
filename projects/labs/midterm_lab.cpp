@@ -7,7 +7,7 @@ int display_state = 0;
 //define global timers
 int timer1 = 0; // timer to be used for seven_segment_control()
 int timer2 = 0; // timer to be used for digital_point_control()
-int timer3 = 0;
+int timer3 = 0; 
 int timer4 = 0;
 
 void initialization_function(void);
@@ -45,8 +45,11 @@ void initialization_function(void)
 void seven_segment_control(void)
 {
 
-	//use timer1 to change display_state every 1s
-	// display_state = 0 1 2.. 9 ...0
+	// use timer1 to change display_state every 1s
+	// timer1         = 0,1,2..8,9,
+	// display_state =  0         ->1    ->2.. 9,next go to 0
+
+
 
 	if(display_state == 0)
 		display_character_0();
@@ -69,6 +72,19 @@ void digital_point_control(void)
 		led = 0;
 	else
 		timer2 = 0;
+
+/*	currently 1 sec on 1 sec off (T = 2s)
+			   _____        _____        _____        _____       
+	          |     |______|     |______|     |______|     |______
+
+
+ modify to be ... T= 0.5 s
+			   _____        _____        _____        _____       
+	          |     |______|     |______|     |______|     |______
+
+
+*/
+
 }
 
 void timers_control()
