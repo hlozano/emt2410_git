@@ -1,12 +1,34 @@
 #include <stdio.h>
 
+#define USE_INT 1
+#define USE_SHORT_INT 0
+#define USE_UNSIGNED_CHAR 0 
+
+
 main() {
 
-   unsigned int a = 60;	/* 60 = 0011 1100 */  
-   unsigned int b = 13;	/* 13 = 0000 1101 */
-   
+#if USE_INT  == 1
+   unsigned int a = 60; /* 60 = 0011 1100 */  
+   unsigned int b = 13; /* 13 = 0000 1101 */
    int c = 0;           
    unsigned int d = 0;
+#endif   
+
+#if USE_SHORT_INT == 1
+   unsigned short int a = 60; /* 60 = 0011 1100 */  
+   unsigned short int b = 13; /* 13 = 0000 1101 */
+   short int c = 0;           
+   unsigned short int d = 0;
+#endif
+   
+#if USE_UNSIGNED_CHAR == 1
+   unsigned char a = 60; /* 60 = 0011 1100 */  
+   unsigned char b = 13; /* 13 = 0000 1101 */
+   char c = 0;           
+   unsigned char d = 0;
+#endif
+
+
    
    //c is signed
    c = a & b;       /* 12 = 0000 1100 */ 
