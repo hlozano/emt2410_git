@@ -19,16 +19,15 @@ const int LED_Blink_Rate = 1000;
 
 
 void setup()
-{ 
+{ //only run once
   pinMode(LEDpin,OUTPUT);
 }
 void loop()
 {
-	
    digitalWrite(LEDpin,HIGH);
-   delay(LED_Blink_Rate);
+   delay(1000); // SAME AS 'wait()' but in ms
    digitalWrite(LEDpin,LOW);
-   delay(LED_Blink_Rate);
+   delay(1000);
 }
 
 
