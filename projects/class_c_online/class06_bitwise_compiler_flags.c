@@ -1,18 +1,25 @@
 #include <stdio.h>
 
-#define USE_INT 1
+#define USE_INT 0
 #define USE_SHORT_INT 0
-#define USE_UNSIGNED_CHAR 0 
+#define USE_UNSIGNED_CHAR 1 
 
 
-main() {
+void main(void) 
+{
 
 #if USE_INT  == 1
    unsigned int a = 60; /* 60 = 0011 1100 */  
    unsigned int b = 13; /* 13 = 0000 1101 */
    int c = 0;           
    unsigned int d = 0;
+   MAKE ANY MISTAKES
 #endif   
+
+
+
+
+
 
 #if USE_SHORT_INT == 1
    unsigned short int a = 60; /* 60 = 0011 1100 */  

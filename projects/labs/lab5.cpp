@@ -45,10 +45,10 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 //function prototypes
 
-void update_lcd();
-void blink_LED();
-void timers();
-int LED_pin 13;
+void update_lcd(void);
+void blink_LED(void);
+void timers(void);
+int LED_pin = 13;
 unsigned long int timer1;
 
 

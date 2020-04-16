@@ -1,7 +1,5 @@
 /*		TIMERS REVIEW		*/
 
-
-
 //DEFINE ALL TIMERS AS UNSIGNED AS VARIABLES	
 
 unsigned long timer1; // timer1 is incremented every 100ms = 0.1s
@@ -96,25 +94,24 @@ else // this is not written down but just implicit
 
 void timers(void)
 {
-	unsigned long ms_runtime = 0;
-	int one_ms_timer = 0; 
-	int i;
+    static unsigned long ms_runtime = 0;
+    static int one_ms_timer = 0; 
+
 	if(millis() > ms_runtime)
-	{
-		ms_runtime = ms_runtime + 1;
+	{// you enter this if statement once every 1 millisecond.
+		ms_runtime++;
 		one_ms_timer++;  
 	}
-	else if( ms_runtime > millis())
-	{ // ELSE PART IS NOT NEEDED unless you 
-	  // are running your code for more than ~ 40 days
-		ms_runtime = millis();
-	}
-	if(one_ms_timer > 99)
-	{ // our choice for 99 gives us increments of 100 ms
+
+	if(one_ms_timer > 99) // 0,1,2,3,99,[100.. immediately forced to zero]
+	{ // "our choice" for 99 gives us increments of 100 ms
+		one_ms_timer = 0;
+		
 		timer1++;
 		timer2++;
 		timer3++;
-		one_ms_timer = 0;
+
+//add as many as you need....
 	}
 	// this means that
 	// if timer1 is 10....... = 1s
