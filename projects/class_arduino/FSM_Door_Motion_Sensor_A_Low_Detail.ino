@@ -1,5 +1,4 @@
-unsigned long ms_runtime;
-unsigned int one_ms_timer;
+
 unsigned int timer1;
 unsigned int heartbeat_timer;
 
@@ -10,10 +9,13 @@ int door_state = 0;
 
 unsigned long timer1; // timer1 is incremented every 100ms = 0.1s
  
+ void read_encoder(void);
  void door_control(void);
+ void lcd_update(void);
+
  int is_door_closed(void);
  int is_door_open(void);
- int is_sensor_active(void);
+ int is_user_detected(void);
 
 
 void setup()
@@ -26,6 +28,8 @@ void loop()
 	timers();
 	heartbeat();
 	door_control();
+	read_encoder();
+	lcd_update();
 }
 
 void door_control(void)
@@ -33,30 +37,36 @@ void door_control(void)
 	switch(door_state)
 	{
 		case 0: //closed
-			if(is_sensor_active() == 1)
+			if(is_user_detected() == 1)
 			{	//go to opening
 				door_state = 1;
 			}
 			break;
+
 		case 1: // opening
 			if(is_door_open() == 1)
+			{
 				door_state = 2;
-			timer1 = 0;
+				timer1 = 0;
+			}
 			break;
+
 		case 2: // open
-			if(timer1>= 50)
+			if(timer1 >= 50)
 				door_state = 3;
-			if(is_sensor_active() == 1)
+			if(is_user_detected() == 1)
 				timer1 = 0;
 			break;
+
 		case 3: // closing
 			if(is_door_closed() == 1)
 				door_state = 0;
-			if(is_sensor_active() == 1)
+			if(is_user_detected() == 1)
 			{
 				door_state = 1; // go to opening state
 			}
 			break;
+
 		default:
 			door_state = 0;
 			break;
@@ -68,27 +78,22 @@ void door_control(void)
 }
 void timers(void)
 {
-	int i;
-	if(millis() > (ms_runtime + 1))
+	static unsigned long ms_runtime;
+	static unsigned int one_ms_timer;
+
+	if(millis() > ms_runtime)
 	{
-		ms_runtime = ms_runtime + 1;
+		ms_runtime++;
 		one_ms_timer++;  
 	}
-	else if( ms_runtime > millis())
+	else if(ms_runtime > millis())
 		ms_runtime = millis();
 
 	if(one_ms_timer > 99) // every 100 ms
 	{
-		if(timer1 <4000000000)
-		{
-			heartbeat_timer++;
-			timer1++;
-			if(go_down_timer1 > 0)
-			{
-				go_down_timer1--;
-			}
-		}
 		one_ms_timer = 0;
+		heartbeat_timer++;
+		timer1++;
 	}
 }
 
