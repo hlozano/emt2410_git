@@ -9,20 +9,50 @@ int door_state = 0;
 
 unsigned long timer1; // timer1 is incremented every 100ms = 0.1s
  
- void read_encoder(void);
- void door_control(void);
- void lcd_update(void);
+void read_encoder(void);
+void door_control(void);
+void lcd_update(void);
 
- int is_door_closed(void);
- int is_door_open(void);
- int is_user_detected(void);
+int is_user_detected(void);
+
+//Motor pins variables and functions
+
+#define motor_close_pin 9
+#define motor_open_pin 10
+
+#define ch_A_pin 11
+#define ch_B_pin 12
+unsigned int motor_position = 0;
+
+void motor_open_door(void);
+void motor_close_door(void);
+void motor_stop(void);
+int is_door_closed(void);
+int is_door_open(void);
+
+
+void motor_open_door(void)
+{
+	digitalWrite(motor_open_pin,HIGH);
+	digitalWrite(motor_close_pin,LOW);
+}
+void motor_close_door(void)
+{
+	digitalWrite(motor_open_pin,LOW);
+	digitalWrite(motor_close_pin,HIGH);
+}
+void motor_stop(void)
+{
+	digitalWrite(motor_open_pin,LOW);
+	digitalWrite(motor_close_pin,LOW);
+}
 
 
 void setup()
 {
-	//initilize inputs, memory, etc
+	pinMode(motor_open_pin, OUTPUT);  
+	pinMode(motor_closed_pin, OUTPUT);  
 }
-
 void loop()
 {
 	timers();
@@ -71,11 +101,9 @@ void door_control(void)
 			door_state = 0;
 			break;
 	}
-
-
-
-
 }
+
+
 void timers(void)
 {
 	static unsigned long ms_runtime;
@@ -107,4 +135,46 @@ void heartbeat()
 		if(heartbeat_timer>=20) //(between 10 and 20 - another 1 s)
 			heartbeat_timer = 0;	//When does the timer get cleared?
 	}
+}
+
+void read_encoder(void)
+{
+	static int encoder_case;
+	int encoder_case_temp = 0;
+
+	if(digitalRead(ch_A_pin))
+		encoder_case_temp+=1;
+	if(digitalRead(ch_B_pin))
+		encoder_case_temp+=2;
+
+	switch(encoder_case)
+	{
+		case 0:
+			if(encoder_case_temp == 3)
+				motor_position--;
+			if(encoder_case_temp == 1)
+				motor_position++;
+			break;
+		case 1:
+			if(encoder_case_temp == 0)
+				motor_position--;
+			if(encoder_case_temp == 2)
+				motor_position++;
+			break;
+		case 2:
+			if(encoder_case_temp == 1)
+				motor_position--;
+			if(encoder_case_temp == 3)
+				motor_position++;
+			break;
+		case 3:
+			if(encoder_case_temp == 2)
+				motor_position--;
+			if(encoder_case_temp == 0)
+				motor_position++;
+			break;
+	}
+	encoder_case = encoder_case_temp;
+
+
 }
