@@ -1,6 +1,7 @@
 // timers is incremented every 100ms = 0.1s
 unsigned long heartbeat_timer;
-unsigned long update_encoder_timer;
+unsigned long update_encoder_timer_in_ms;
+unsigned long print_timer;
  
 void encoder_output(void);
 
@@ -12,7 +13,7 @@ void encoder_output(void);
 #define heartbeat_LED 13
 
 unsigned int encoder_state = 0; //0 = stop, 1 = UP, 2 = DOWN
-unsigned long encoder_pulse_duration;
+unsigned long encoder_pulse_duration_in_ms;
 
 void setup()
 {
@@ -78,6 +79,7 @@ void timers(void)
 	{
 		ms_runtime++;
 		one_ms_timer++;  
+		update_encoder_timer_in_ms++;//this is ms timer
 	}
 	else if(ms_runtime > millis())
 		ms_runtime = millis();
@@ -86,7 +88,7 @@ void timers(void)
 	{
 		one_ms_timer = 0;
 		heartbeat_timer++;
-		update_encoder_timer++;
+		print_timer++;
 	}
 }
 
@@ -109,22 +111,30 @@ void encoder_output(void)
 
 	unsigned long MOTOR_RPM = 60;
 	unsigned long ENCDR_PPR = 20;
-	//						1000 (ms)
-	encoder_pulse_duration = (1000 * MOTOR_RPM) / 60 / ENCDR_PPR;
+	//								1000 (ms)
+	encoder_pulse_duration_in_ms = (1000 * MOTOR_RPM) / 60 / ENCDR_PPR;
 	//
-	//encoder_pulse_duration = 1000 * (60/60) / 20
-							//= 1000 * 1 rps  / 20
+	//encoder_pulse_duration_in_ms = 1000 * (60/60) / 20
+	//						 	   = 1000 *   1 rps / 20
 
-	Serial.print(encoder_state);
-	Serial.println(encoder_counts);
+	if(print_timer > 10)
+	{	
+		print_timer = 0;
+		Serial.println(encoder_pulse_duration_in_ms);
+		Serial.println(update_encoder_timer_in_ms);
+		Serial.println(encoder_state);
+		Serial.println(encoder_counts);
+		Serial.println("---");
+	}
 
 	if(encoder_state == 0)
 	{
-		update_encoder_timer = 0;
+		update_encoder_timer_in_ms = 0;
 	}
 
-	if(update_encoder_timer >= encoder_pulse_duration)
+	if(update_encoder_timer_in_ms >= encoder_pulse_duration_in_ms)
 	{
+		update_encoder_timer_in_ms = 0;
 		if(encoder_state == 1)
 		{
 			encoder_counts++;
