@@ -137,44 +137,42 @@ void heartbeat()
 	}
 }
 
-void read_encoder(void)
-{
-	static int encoder_case;
-	int encoder_case_temp = 0;
+// void read_encoder(void)
+// {
+// 	static int encoder_case;
+// 	int encoder_case_temp = 0;
 
-	if(digitalRead(ch_A_pin))
-		encoder_case_temp+=1;
-	if(digitalRead(ch_B_pin))
-		encoder_case_temp+=2;
+// 	if(digitalRead(ch_A_pin))
+// 		encoder_case_temp+=1;
+// 	if(digitalRead(ch_B_pin))
+// 		encoder_case_temp+=2;
 
-	switch(encoder_case)
-	{
-		case 0:
-			if(encoder_case_temp == 3)
-				motor_position--;
-			if(encoder_case_temp == 1)
-				motor_position++;
-			break;
-		case 1:
-			if(encoder_case_temp == 0)
-				motor_position--;
-			if(encoder_case_temp == 2)
-				motor_position++;
-			break;
-		case 2:
-			if(encoder_case_temp == 1)
-				motor_position--;
-			if(encoder_case_temp == 3)
-				motor_position++;
-			break;
-		case 3:
-			if(encoder_case_temp == 2)
-				motor_position--;
-			if(encoder_case_temp == 0)
-				motor_position++;
-			break;
-	}
-	encoder_case = encoder_case_temp;
-
-
-}
+// 	switch(encoder_case)
+// 	{
+// 		case 0:
+// 			if(encoder_case_temp == 3)
+// 				motor_position--;
+// 			if(encoder_case_temp == 1)
+// 				motor_position++;
+// 			break;
+// 		case 1:
+// 			if(encoder_case_temp == 0)
+// 				motor_position--;
+// 			if(encoder_case_temp == 2)
+// 				motor_position++;
+// 			break;
+// 		case 2:
+// 			if(encoder_case_temp == 1)
+// 				motor_position--;
+// 			if(encoder_case_temp == 3)
+// 				motor_position++;
+// 			break;
+// 		case 3:
+// 			if(encoder_case_temp == 2)
+// 				motor_position--;
+// 			if(encoder_case_temp == 0)
+// 				motor_position++;
+// 			break;
+// 	}
+// 	encoder_case = encoder_case_temp;
+// }
