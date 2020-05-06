@@ -70,6 +70,7 @@ void door_control(void)
 	switch(door_state)
 	{
 		case 0: //closed
+			motor_stop();
 			if(is_user_detected() == 1)
 			{	//go to opening
 				door_state = 1;
@@ -77,6 +78,7 @@ void door_control(void)
 			break;
 
 		case 1: // opening
+			motor_open_door();
 			if(is_door_open() == 1)
 			{
 				door_state = 2;
@@ -85,6 +87,7 @@ void door_control(void)
 			break;
 
 		case 2: // open
+			motor_stop();
 			if(timer1 >= 50)
 				door_state = 3;
 			if(is_user_detected() == 1)
@@ -92,6 +95,7 @@ void door_control(void)
 			break;
 
 		case 3: // closing
+			motor_close_door();
 			if(is_door_closed() == 1)
 				door_state = 0;
 			if(is_user_detected() == 1)
@@ -162,7 +166,7 @@ void read_encoder(void)
 	switch(encoder_case)
 	{
 		case 0:
-			if(encoder_case_temp == 3)
+			if(encoder_case_temp == 2)
 				motor_position--;
 			if(encoder_case_temp == 1)
 				motor_position++;
@@ -199,4 +203,5 @@ void read_encoder(void)
   
 	encoder_case = encoder_case_temp;
 }
+ 
  
