@@ -120,11 +120,15 @@ void encoder_output(void)
 	if(print_timer > 10)
 	{	
 		print_timer = 0;
+		Serial.print("encoder_pulse_duration_in_ms  ");
 		Serial.println(encoder_pulse_duration_in_ms);
+		Serial.print("update_encoder_timer_in_ms  ");
 		Serial.println(update_encoder_timer_in_ms);
+		Serial.print("encoder_state  ");
 		Serial.println(encoder_state);
+		Serial.print("encoder_counts  ");
 		Serial.println(encoder_counts);
-		Serial.println("---");
+		Serial.println("------------------------------------------");
 	}
 
 	if(encoder_state == 0)
