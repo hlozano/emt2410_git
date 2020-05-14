@@ -8,6 +8,8 @@ unsigned long timer1; // timer1 is incremented every 100ms = 0.1s
 
 const int LED1 = 13;
 int inByte;
+int command; 
+int reponse_required = 0;
 
 void setup()
 {               
@@ -16,19 +18,22 @@ void setup()
 }
 void loop()
 {
-    static int command; 
     timers();
-	if (Serial.available() > 0) 
-	{
-		inByte = Serial.read();
-		command = inByte;
-	}
+    slave_receive_command();
 
+    if(reponse_required == 1)
+    {
+    	reponse_required = 0;
+    	slave_send_response();
+    }
 
+    led_control();
 
-
-
-	switch (command)
+}
+ 
+ void led_control()
+ {
+ 		switch (command)
 	{
 		case '0': 
 			flash_fast();
@@ -51,7 +56,18 @@ void loop()
 		default:
 			turn_off();
 	}
+ }
+
+void slave_receive_command()
+{
+	if (Serial.available() > 0) 
+	{
+		inByte = Serial.read();
+		command = inByte;
+		reponse_required = 1;
+	}
 }
+
 void turn_off(void)
 {
 	digitalWrite(LED1,LOW);

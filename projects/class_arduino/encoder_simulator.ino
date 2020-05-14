@@ -8,6 +8,7 @@ void encoder_output(void);
 //define pins
 #define motor_M1 2
 #define motor_M2 3
+
 #define ch_A_pin 4
 #define ch_B_pin 5
 #define heartbeat_LED 13
