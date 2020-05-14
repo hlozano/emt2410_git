@@ -19,6 +19,15 @@ void loop()
 		send_first_packet = 0;
 		master_send_command();
 	}
+	master_receive_reponse();
+}
+
+void master_receive_reponse()
+{
+	if (Serial.available() > 0) 
+	{
+		//process the data recieved from the slave
+	}
 }
 
 void master_send_command(void)
