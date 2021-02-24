@@ -1,20 +1,50 @@
+/* mbed Microcontroller Library
+ * Copyright (c) 2019 ARM Limited
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "mbed.h"
+#include "platform/mbed_thread.h"
+int timer1 = 0;
+DigitalOut led(LED1);
 
-Ticker toggle_led_ticker;
+void init_function(void);
+void control_function(void);
+void timers(void);
+void flash_one_second(void);
 
-DigitalOut led1(LED1);
+Ticker timers_interrupt;//name your interrupt
 
-void toggle_led() 
+int main()
 {
-    led1 = !led1;
+    init_function();
+    while (1)
+    {
+        control_function();
+    }
 }
 
-int main() 
+void init_function(void)
 {
-    // Init the ticker with the address of the function (toggle_led) to be attached and the interval (100 ms)
-    toggle_led_ticker.attach(&toggle_led, 0.1);
-    while (true) 
-    {
-        // Do other things...
-    }
+    timers_interrupt.attach(&timers, 0.1);//call this interrupt every 0.1s
+    printf("starting...\n");
+}
+void control_function(void)
+{
+    flash_one_second();
+}
+void flash_one_second(void)
+{
+    if (timer1 < 10)
+        led = 1;
+    else if (timer1 < 20)
+        led = 0;
+    else
+        timer1 = 0;
+}
+
+void timers()
+{
+    //timer1 timer + 1;
+    timer1++;
 }
