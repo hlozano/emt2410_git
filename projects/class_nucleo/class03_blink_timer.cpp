@@ -5,8 +5,9 @@
 
 #include "mbed.h"
 #include "platform/mbed_thread.h"
-int timer1 = 0;
+
 DigitalOut led(LED1);
+int timer1 = 0;
 
 void init_function(void);
 void control_function(void);
@@ -32,19 +33,23 @@ void init_function(void)
 void control_function(void)
 {
     flash_one_second();
+    //Do other things...
 }
+
 void flash_one_second(void)
 {
-    if (timer1 < 10)
+    if (timer1 < 10)//0,1,2,3,4,5,6,7,8,9,
         led = 1;
-    else if (timer1 < 20)
+    else if (timer1 < 20)//10,11,12,13,14,15,16,17,18,19,
         led = 0;
-    else
-        timer1 = 0;
+    else //20
+        timer1 = 0; //reset the variable timer 1 back to zero
 }
 
 void timers()
 {
-    //timer1 timer + 1;
-    timer1++;
+    timer1 = timer1 + 1;
+    // timer1++;
+    //timer variable will increase
+    // 0 -> 1 -> 2 -> 3 -> 4...
 }

@@ -1,3 +1,13 @@
+//example of a blinking led
+
+/*
+this
+is 
+a 
+multiline
+comment
+*/
+
 #include "mbed.h"
 
 DigitalOut myled(LED1);
