@@ -12,10 +12,14 @@ void loop()
 {
     counter++;
     if(millis() > ms_runtime)
-	{
+	{//goes in this "if" because one millisecond has passed!
 		ms_runtime = ms_runtime + 1;
 		one_ms_timer = one_ms_timer + 1; //one_ms_timer++;  
 	}
+
+
+
+
 	 if(one_ms_timer>=1000)
 	//if(one_ms_timer>=100)
 	{	

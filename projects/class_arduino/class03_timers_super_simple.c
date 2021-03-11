@@ -21,18 +21,21 @@ void loop()
 {
     timers();
 	flash_led1();
-	flash_led2();
-	flash_led3();
+
 }
 void flash_led1() 
 {
-	if(timer1<10)			//first 10 (10 times 100 ms = 1s)
+    if (timer1 < 10)//0,1,2,3,4,5,6,7,8,9,
+    {
 		digitalWrite(LED1,HIGH); 
-	else
+    }
+    else if (timer1 < 20)//10,11,12,13,14,15,16,17,18,19,
 	{
 		digitalWrite(LED1,LOW);
-		if(timer1>=20) //(between 10 and 20 - another 1 s)
-			timer1 = 0;	//When does the timer get cleared?
+	}
+	else
+	{
+		timer1 = 0;	//When does the timer get cleared?
 	}
 }
 void flash_led2()
@@ -102,14 +105,10 @@ void timers(void)
 		ms_runtime = ms_runtime + 1;
 		one_ms_timer++;  
 	}
-	else if( ms_runtime > millis())
-	{ // ELSE PART IS NOT NEEDED unless you 
-	  // are running your code for more than ~ 40 days
-		ms_runtime = millis();
-	}
+
 	if(one_ms_timer > 99)
 	{ // our choice for 99 gives us increments of 100 ms
-		timer1++;
+		timer1++; //  same as timer = timer + 1;
 		timer2++;
 		timer3++;
 		one_ms_timer = 0;

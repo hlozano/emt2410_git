@@ -20,6 +20,9 @@ void loop()
 
 /*
 in c programming you have
+
+#include "Arduino.h"
+
 int main()
 {
 

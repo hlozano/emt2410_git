@@ -23,6 +23,7 @@ int main()
     {
         control_function();
     }
+    return 0;
 }
 
 void init_function(void)
