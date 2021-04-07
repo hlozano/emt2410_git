@@ -2,9 +2,11 @@
 
 //DEFINE ALL TIMERS AS UNSIGNED AS VARIABLES	
 
-unsigned long timer1; // timer1 is incremented every 100ms = 0.1s
-unsigned long timer2; // timer2 is incremented every 100ms = 0.1s
-unsigned long timer3; // timer3 is incremented every 100ms = 0.1s
+unsigned long timer1; 		// timer1 		is incremented every 100ms = 0.1s
+unsigned long timer2; 		// timer2 		is incremented every 100ms = 0.1s
+unsigned long timer3; 		// timer3 		is incremented every 100ms = 0.1s
+unsigned long print_timer;  // print_timer  is incremented every 100ms = 0.1s
+
 
 const int LED1 = 11;
 const int LED2 = 12;
@@ -20,9 +22,27 @@ void setup()
 void loop()
 {
     timers();
+    debug_print();
 	flash_led1();
+	flash_led2();
+	flash_led3();
 
 }
+
+void debug_print()
+{
+	static int counter = 0;
+
+	if(print_timer >= 20)
+	{
+		//do something
+		Serial.print("debugging=>");
+	    Serial.println(counter);
+		//reset timer
+		print_timer = 0;
+	}
+}
+
 void flash_led1() 
 {
     if (timer1 < 10)//0,1,2,3,4,5,6,7,8,9,
@@ -99,18 +119,20 @@ void timers(void)
 {
 	static unsigned long ms_runtime = 0;
 	static int one_ms_timer = 0; 
-	int i;
-	if(millis() > ms_runtime)
-	{
+    int i;
+
+	if(millis() > ms_runtime) // 99.9% of the time will be the same as millis
+	{//falling inside this if statement happens every one ms
 		ms_runtime = ms_runtime + 1;
 		one_ms_timer++;  
 	}
 
-	if(one_ms_timer > 99)
+	if(one_ms_timer > 99) //0-1-2-3-4-...98-99->0
 	{ // our choice for 99 gives us increments of 100 ms
 		timer1++; //  same as timer = timer + 1;
 		timer2++;
 		timer3++;
+		print_timer++;
 		one_ms_timer = 0;
 	}
 	// this means that
