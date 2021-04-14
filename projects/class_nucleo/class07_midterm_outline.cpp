@@ -19,6 +19,7 @@ void init_function(void);
 void control_function(void);
 void dp_led_control(void);
 void seven_segment_control(void);
+void timers(void);
 
 int main(void)
 {
@@ -77,6 +78,8 @@ void seven_segment_control(void)
             seven_segment_state = 0;
         timer2 = 0;
     }
+
+    //control the segments based on seven_segment_state 
 
 }
 
