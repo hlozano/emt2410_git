@@ -1,3 +1,25 @@
+// program was tested using online REPL
+//https://repl.it/languages/c       <- for C language
+//https://repl.it/languages/cpp  <- for C++ language
+
+//Bitwise operators
+//two inputs
+//  a & b [and]
+//  a | b [or]
+//  a ^ b [xor]
+
+//one input
+//  ~ a   [not]
+// ~0 -> 1
+// ~1 -> 0
+
+//bit shifting
+//     a >> 1;
+//     a << 1;
+
+
+
+
 #include <stdio.h>
 
 main() {
@@ -48,8 +70,12 @@ main() {
 //--------------------------------------------------------------
 //--------------------------------------------------------------
 
-   c = ~a;          /*-61 = 1100 0011 */
-   printf("Line 4 - Value of c is %d\n", c );
+ // unsigned char a = 60;  /* 60 = 0011 1100 */
+   d = ~a;                  /*195 = 1100 0011 */
+   printf("Line 4a - Value of d is %d\n", d );
+
+   c = ~a;                  /*-61 = 1100 0011 */
+   printf("Line 4b - Value of c is %d\n", c );
 
    c = a << 2;     /* 240 = 1111 0000 */
    printf("Line 5 - Value of c is %d\n", c );

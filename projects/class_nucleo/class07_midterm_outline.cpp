@@ -10,7 +10,7 @@ unsigned int timer2; // timer used for up counter in 7-segment display
 
 
 
-//variable to control state of 7-segment
+//variable to control state of 7-segment display
 unsigned int seven_segment_state; // 0,1,2,3,4,5,6,7,8,9,0,1,2...
 
 
@@ -70,16 +70,39 @@ void seven_segment_control(void)
         timer2 = 0;
     }
 
-    if(timer2 > ??)
+    if(timer2 > 9)
     {
+        timer2 = 0;
         if(seven_segment_state < 9)
             seven_segment_state++;
         else
             seven_segment_state = 0;
-        timer2 = 0;
     }
 
     //control the segments based on seven_segment_state 
+
+    if(seven_segment_state == 0)
+        display_character_0();
+    else if(seven_segment_state == 1)
+        display_character_1();
+    else if(seven_segment_state == 2)
+        display_character_2();
+    else if(seven_segment_state == 2)
+        display_character_2();
+    else if(seven_segment_state == 3)
+        display_character_3();
+    else if(seven_segment_state == 4)
+        display_character_4();
+    else if(seven_segment_state == 5)
+        display_character_5();
+    else if(seven_segment_state == 6)
+        display_character_6();
+    else if(seven_segment_state == 7)
+        display_character_7();
+    else if(seven_segment_state == 8)
+        display_character_8();
+    else if(seven_segment_state == 9)
+        display_character_9();
 
 }
 
