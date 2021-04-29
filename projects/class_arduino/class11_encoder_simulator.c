@@ -93,7 +93,7 @@ void timers(void)
 	}
 }
 
-void heartbeat() 
+void heartbeat(void) 
 {
 	if(heartbeat_timer<10)			//first 10 (10 times 100 ms = 1s)
 		digitalWrite(heartbeat_LED,HIGH); 
