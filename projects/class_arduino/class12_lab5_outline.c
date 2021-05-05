@@ -8,21 +8,26 @@ void timers(void);
 
 int is_door_closed(void);
 int is_door_open(void);
-int is_sensor_on(void); 
+int is_sensor_on(void);
+
+void motor_drive_open(void);
+void motor_drive_close(void);
+void motor_stop(void);
 
 const int LED_pin = 13;
+const int open_output_pin = 6;
+const int close_output_pin = 7;
 const int open_signal_pin = 8;
 const int closed_signal_pin = 9;
 const int sensor_pin = 10;
-const int close_output_pin = 7;
-const int open_output_pin = 6;
-
 
 int door_state = 0;
 
 unsigned long int timer1;
 unsigned long int timer2;
 unsigned long int heartbeat_timer;
+unsigned long int update_lcd_timer;
+
 
 void setup() 
 {
@@ -45,35 +50,99 @@ void door_control(void)
 {
   if(door_state == 0)
   {
-    digitalWrite(open_output_pin,LOW);
-    digitalWrite(close_output_pin,LOW);    
+    motor_stop();
     if(is_sensor_on() == 1)
       door_state = 1;
 
   }
   else if(door_state == 1)
   {
-      digitalWrite(open_output_pin,HIGH);
-      digitalWrite(close_output_pin,LOW);
+      motor_drive_open();
       if(is_door_open() == 1)
+      {
           door_state = 2;
+          timer1 = 0;
+      }
 
   } 
   else if(door_state == 2)
   {
-      digitalWrite(open_output_pin,LOW);
-      digitalWrite(close_output_pin,LOW);
+    motor_stop();
+    if(is_sensor_on() == 1)
+      timer1 = 0;
+
+    if(timer1 >= 50) //50 * 0.100 = 5s
+    {
+        door_state = 3;
+    }
   } 
   else if(door_state == 3)
   {
-      digitalWrite(open_output_pin,LOW);
-      digitalWrite(close_output_pin,HIGH);
+      //pending implementation
 
   } 
+  /*
+
+
+  switch(door_state)
+  {
+      case 0:
+          motor_stop();
+          if(is_sensor_on() == 1)
+            door_state = 1;
+          break;      
+      case 1:
+          motor_drive_open();
+          if(is_door_open() == 1)
+          {
+              door_state = 2;
+              timer1 = 0;
+          }
+          break;
+      case 2:
+          motor_stop();
+          if(is_sensor_on() == 1)
+            timer1 = 0;
+
+          if(timer1 >= 50) //50 * 0.100 = 5s
+          {
+              door_state = 3;
+          }
+          break;
+      case 3:
+      //pending implementation
+          break;
+   }
+
+
+
+
+  */
 }
+
+void motor_drive_open(void)
+{
+    digitalWrite(open_output_pin,HIGH);
+    digitalWrite(close_output_pin,LOW);
+}
+void motor_drive_close(void)
+{
+    digitalWrite(open_output_pin,LOW);
+    digitalWrite(close_output_pin,HIGH);
+}
+void motor_stop(void)
+{
+    digitalWrite(open_output_pin,LOW);
+    digitalWrite(close_output_pin,LOW);  
+}
+
 
 void update_lcd(void)
 {
+  if(update_lcd_timer >= 5)
+  {
+    //write something to the LCD
+  }
 }
 
 void heartbeat(void) 
@@ -123,6 +192,7 @@ void timers(void)
         timer1++;
         timer2++;
         heartbeat_timer++;
+        update_lcd_timer++;
         one_ms_timer = 0;
     }
 }
