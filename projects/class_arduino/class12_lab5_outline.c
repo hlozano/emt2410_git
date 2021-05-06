@@ -14,9 +14,11 @@ void motor_drive_open(void);
 void motor_drive_close(void);
 void motor_stop(void);
 
+//OUTPUTS
 const int LED_pin = 13;
 const int open_output_pin = 6;
 const int close_output_pin = 7;
+//INPUTS
 const int open_signal_pin = 8;
 const int closed_signal_pin = 9;
 const int sensor_pin = 10;
@@ -35,8 +37,14 @@ void setup()
   lcd.begin(16, 2);
   // Print a message to the LCD.
   lcd.print("hello, world!");
+  //INPUTS
   pinMode(sensor_pin,INPUT);  
+  pinMode(open_signal_pin,INPUT);  
+  pinMode(closed_signal_pin,INPUT);  
+  //OUTPUTS
   pinMode(LED_pin,OUTPUT);
+  pinMode(open_output_pin,OUTPUT);
+  pinMode(open_output_pin,OUTPUT);
 }
 
 void loop()
@@ -160,6 +168,11 @@ void heartbeat(void)
 
 int is_sensor_on(void)
 {
+    /*if(digitalRead(sensor_pin) == 1)
+      return 1;
+    else
+      return 0;
+    */
     return digitalRead(sensor_pin);
 }
 int is_door_open(void)
