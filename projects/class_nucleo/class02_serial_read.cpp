@@ -1,7 +1,9 @@
 #include "mbed.h"
 
 Serial pc(SERIAL_TX, SERIAL_RX);
-DigitalOut led(LED1);
+DigitalOut led(LED1); 
+// DigitalOut led(PA_5);
+// same effect as line before
 
 int main()
 {
