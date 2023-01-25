@@ -3,34 +3,25 @@
 /*------------------------------------------------------------------------------
 Before to use this example, ensure that you an hyperterminal installed on your
 computer. More info here: https://developer.mbed.org/handbook/Terminals
+-------------------------------------------------------------------------------*/
 
-The default serial comm port uses the SERIAL_TX and SERIAL_RX pins (see their
-definition in the PinNames.h file).
-
-The default serial configuration in this case is 9600 bauds, 8-bit data, no parity
-
-If you want to change the baudrate for example, you have to redeclare the
-serial object in your code:
-
-Serial pc(SERIAL_TX, SERIAL_RX);
-
-Then, you can modify the baudrate and print like this:
-
-pc.baud(115200);
-pc.printf("Hello World !\n");
-------------------------------------------------------------------------------*/
-
-DigitalOut led(LED1);
+#define WAIT_TIME_MS 500 
+DigitalOut led1(LED1);
 
 int main()
 {
     int i = 1;
+    printf("This is the bare metal blinky example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
+
 
     printf("Hello World !\n");
 
     while(1) {
-        wait(1); // 1 second
-        led = !led; // Toggle LED
-        printf("This program runs since %d seconds.\n", i++);
+        led1 = 0;
+        thread_sleep_for(WAIT_TIME_MS);
+        printf("This program runs for %d seconds.\n", i++);
+        led1 = 1;
+        thread_sleep_for(WAIT_TIME_MS);  
+        printf("This program runs for %d seconds.\n", i++);
     }
 }

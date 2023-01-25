@@ -5,6 +5,13 @@ multiline
 comment
 */
 
+//based on bare metal code from studio.keil.arm.com
+
+/* mbed Microcontroller Library
+ * Copyright (c) 2019 ARM Limited
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "mbed.h"
 #define SLEEP_TIME_MS 1000 
 DigitalOut myled(LED1);
