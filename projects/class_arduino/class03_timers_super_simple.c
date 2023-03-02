@@ -34,12 +34,12 @@ void debug_print()
 	static int counter = 0;
 
 	if(print_timer >= 20)
-	{
+	{	print_timer = 0;
 		//do something
 		Serial.print("debugging=>");
 	    Serial.println(counter);
 		//reset timer
-		print_timer = 0;
+
 	}
 }
 
@@ -142,6 +142,24 @@ void timers(void)
 	// if timer1 is 10000.... = 1000s
 	// if timer1 is 36000.... = 3600s = 1 hour
 	//
+
+}
+void timers_2(void)
+{
+	static unsigned long old_millis = 0; //static means it never drops the contents of this variable
+	const int timers_interval = 100; // in ms
+
+	if(millis() >= old_millis + timers_interval) // 99.99% will not go in
+	{//falling inside this if statement happens every "interval # of ms
+		old_millis = millis();
+
+		timer1++; //  same as timer = timer + 1;
+		timer2++;
+		timer3++;
+		print_timer++;
+		one_ms_timer = 0;
+	}
+
 
 }
 
