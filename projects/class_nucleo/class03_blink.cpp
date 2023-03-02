@@ -19,7 +19,6 @@ int main()
 
 void toggle_led(void) 
 {
-    led1 = led1;
-
+    led1 = !led1;
 }
 
