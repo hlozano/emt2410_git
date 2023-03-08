@@ -87,8 +87,6 @@ void seven_segment_control(void)
         display_character_1();
     else if(seven_segment_state == 2)
         display_character_2();
-    else if(seven_segment_state == 2)
-        display_character_2();
     else if(seven_segment_state == 3)
         display_character_3();
     else if(seven_segment_state == 4)
