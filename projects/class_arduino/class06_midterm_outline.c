@@ -64,23 +64,22 @@ void seven_segment_control(void)
 
 
 
+
 void timers(void)
 {
-    static unsigned long ms_runtime = 0;
-    static int one_ms_timer = 0; 
+  static unsigned long millis_old = 0;// track the # ms the mcu has been running
+  unsigned interval = 100;  // meaning every 100ms
 
-    if(millis() > ms_runtime)
-    {
-        ms_runtime++;
-        one_ms_timer++;  
-    }
+  if(millis() >= millis_old + interval)
+  {//it falls into this section once every 100s
+    millis_old = millis_old + interval;
+    timer1++;
+    timer2++;
+  }
 
-    if(one_ms_timer > 99)
-    { // our choice for 99 gives us increments of 100 ms
-        timer1++;
-        timer2++;
-        one_ms_timer = 0;
-    }
+  if(millis_old > millis())//if you run for a very long time, correct overflow
+    millis_old = millis();  
+
 }
 
 
