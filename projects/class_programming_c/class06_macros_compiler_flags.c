@@ -8,10 +8,10 @@
 #if USE_SUM_MACRO_VERSION == 1
     #define sum(a,b) a+b // broken definition (missing parenthesis)
 #else
-    int sum(int a , int b)
-    {
-      return a+b;
-    }
+    // int sum(int a , int b)
+    // {
+    //   return a+b;
+    // }
 #endif
 
 int main(void) 

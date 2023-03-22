@@ -1,19 +1,23 @@
+// program was tested using online REPL
+//https://repl.it/languages/c       <- for C language
+//https://repl.it/languages/cpp     <- for C++ language
+//
 #include <stdio.h>
 
 int main() 
 {
 
-   unsigned char a = 60;   /* 60 = 0011 1100 */  
+   unsigned char a = 60;   /*     0011 1100 -> 0x3C*/  
   /*                              1110 0111 -> 0xE7*/   
   /*                              0001 1000 -> 0x18*/   
   /*                              1000 0001 -> 0x81*/    
   unsigned char b = 0;           
-  unsigned char c = 0;
+  unsigned int c = 0;
   unsigned char d = 0;
   unsigned char e = 0;
 
-  b = a | 0x81;
-  c = a & 0xE7;
+  b = a | ~0x81;
+  c = a | ~0x81;
   d = a & ~(0x18);
   // part 1 - how to set a bit
   e = e | 0x02;  // 0 OR 2 
@@ -44,3 +48,45 @@ int main()
   printf("Line 5 - Value of e is %u\n", e);
   return 1;
 }
+
+   unsigned char a = 60;   /*     0011 1100 -> 0x3C*/  
+  /*                              1110 0111 -> 0xE7*/   
+  /*                              0001 1000 -> 0x18*/   
+  /*                              1000 0001 -> 0x81*/ 
+/*
+  b = a | ~0x81;
+  as bytes
+  b = 0x3C | ~0x81
+  b = 0b 0011 1100 | ~ 0b 1000 0001
+  b = 0b 0011 1100 |   0b 0111 1110
+
+  b = 0b 0011 1100 |
+      0b 0111 1110 
+
+  b = 0b 0111 1110
+      0x 7E
+      b = 126
+
+
+
+
+
+
+
+
+  c = a | ~0x81;
+  as a 32 bit integer
+  c = 0x 0000003C                                | ~ 0x 0000081
+  c = 0b 0000 0000 0000 0000 0000 0000 0011 1100 | ~ 0b 0000 0000 0000 0000 0000 0000 1000 0001
+  c = 0b 0000 0000 0000 0000 0000 0000 0011 1100 |   0b 1111 1111 1111 1111 1111 1111 0111 1110
+  c = 0b 0000 0000 0000 0000 0000 0000 0011 1100 |
+      0b 1111 1111 1111 1111 1111 1111 0111 1110
+
+  c = 0b 1111 1111 1111 1111 1111 1111 0111 1110
+    = 0x F    F    F    F    F    F    7    E
+
+
+
+
+  c = a | ~0x81;
+*/

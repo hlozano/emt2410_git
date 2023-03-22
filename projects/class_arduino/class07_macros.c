@@ -1,6 +1,6 @@
 //USING MACROS
 
-#define myLEDpin  13
+#define myLEDpin   13
 #define TIME1000ms 1000
 
 void setup()

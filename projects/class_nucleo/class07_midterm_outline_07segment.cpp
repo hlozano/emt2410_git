@@ -81,26 +81,26 @@ void seven_segment_control(void)
 
     //control the segments based on seven_segment_state 
 
-    if(seven_segment_state == 0)
-        display_character_0();
-    else if(seven_segment_state == 1)
-        display_character_1();
-    else if(seven_segment_state == 2)
-        display_character_2();
-    else if(seven_segment_state == 3)
-        display_character_3();
-    else if(seven_segment_state == 4)
-        display_character_4();
-    else if(seven_segment_state == 5)
-        display_character_5();
-    else if(seven_segment_state == 6)
-        display_character_6();
-    else if(seven_segment_state == 7)
-        display_character_7();
-    else if(seven_segment_state == 8)
-        display_character_8();
-    else if(seven_segment_state == 9)
-        display_character_9();
+    // if(seven_segment_state == 0)
+    //     display_character_0();
+    // else if(seven_segment_state == 1)
+    //     display_character_1();
+    // else if(seven_segment_state == 2)
+    //     display_character_2();
+    // else if(seven_segment_state == 3)
+    //     display_character_3();
+    // else if(seven_segment_state == 4)
+    //     display_character_4();
+    // else if(seven_segment_state == 5)
+    //     display_character_5();
+    // else if(seven_segment_state == 6)
+    //     display_character_6();
+    // else if(seven_segment_state == 7)
+    //     display_character_7();
+    // else if(seven_segment_state == 8)
+    //     display_character_8();
+    // else if(seven_segment_state == 9)
+    //     display_character_9();
 
 }
 
