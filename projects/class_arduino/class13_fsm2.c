@@ -5,6 +5,9 @@ int L1 = 10;
 int L2 = 11;
 int L3 = 12;
 const int TRANSTION_TIME = 20;
+const int TRANSTION_TIME_LONG = 40;
+const int TRANSTION_TIME_QUICK = 10;
+
 
 int state = 0;
 
@@ -26,7 +29,9 @@ void loop()
   
   switch (state)
   {
-    case 0:
+
+
+/*    case 0:
       digitalWrite(L1, HIGH);
       digitalWrite(L2, LOW);
       digitalWrite(L3, LOW);
@@ -36,8 +41,59 @@ void loop()
         state = 1;
         timer1 = 0;
       }
+      break;*/
+
+      /*
+    case 0:
+      digitalWrite(L1, HIGH);
+      digitalWrite(L2, LOW);
+      digitalWrite(L3, LOW);
+    
+      if (traffic_sensor == 1) // digitalRead required here
+      {
+        if (timer1 >= TRANSTION_TIME_LONG)
+        {
+          state = 1;
+          timer1 = 0;
+        }
+      }
+      else if (pedestrian_request == 1) // digitalRead required here
+      {
+        if (timer1 >= TRANSTION_TIME_QUICK)
+        {
+          state = 1;
+          timer1 = 0;
+        }
+      }
+      else
+      {
+        if (timer1 >= TRANSTION_TIME)
+        {
+          state = 1;
+          timer1 = 0;
+        }
+      }
       break;
 
+      */
+
+     
+    case 0:
+      digitalWrite(L1, HIGH);
+      digitalWrite(L2, LOW);
+      digitalWrite(L3, LOW);
+    
+      if ( ((traffic_sensor == 1) && /*(pedestrian_request == 0)  && */ (timer1 >= TRANSTION_TIME_LONG))  ||
+           ((traffic_sensor == 0) && (pedestrian_request == 1)  && (timer1 >= TRANSTION_TIME_QUICK)) ||
+           ((traffic_sensor == 0) && (pedestrian_request == 0)  && (timer1 >= TRANSTION_TIME)))
+      {
+          state = 1;
+          timer1 = 0;   
+      }
+
+      break;
+
+      */
     case 1:
       digitalWrite(L1, LOW);
       digitalWrite(L2, HIGH);
