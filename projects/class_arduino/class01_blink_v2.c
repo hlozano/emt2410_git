@@ -6,7 +6,9 @@
   provides clarity
 */
 
-const int myled = 13;
+//const int myled = 13;
+
+#define myled 13
 
 void setup()
 { 

@@ -157,7 +157,6 @@ void timers_2(void)
 		timer2++;
 		timer3++;
 		print_timer++;
-		one_ms_timer = 0;
 	}
 
 
