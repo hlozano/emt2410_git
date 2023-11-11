@@ -9,6 +9,7 @@ int state = 0;
 int N = 0;
 bool coin_detected = 0;
 bool abort_request = 0;
+bool need_to_count = 0;
 unsigned long timer1; 
 
 
@@ -19,58 +20,100 @@ void setup()
 }
 void loop()
 {
-
   timers();
   read_inputs(); // monitor coins and cancel button
   machine_control();
   print_diagnostics();
   heartbeat();
-
-
-
-  
 }
 
 void machine_control()
 {
-  switch(state)
-  {
-    case 0:
+   if(state == 0)
+   {
       if(coin_detected == 1)
-        state = 1;
-      if (N == 4)
       {
-        state = 2;
-        timer1 = 0;
+        state = 1;
+        timer = 0;
+        need_to_count = 1;
       }
-      if (abort_request == 1)
+      else if(abort_request == 1)
       {
         state = 3;
-        timer1 = 0;
+        timer = 0;        
       }
-
-      break;
-    case 1:
-      N++;
-      state = 0;
-      break;
-    case 2:
+      else if(N == 4)
+      {
+        state = 2;
+        timer = 0;        
+      }
+    }
+    else if(state == 1)
+    {
+      if(need_to_count == 1)
+      {
+        N++;
+        need_to_count = 0;
+      }
+      if(timer >= 5)
+        state = 0;
+    }
+    else if(state == 2)
+    {
       dispense_control();
-      if (timer1 > = 50)
-      {
+      if(timer >= 50)
         state = 0;
-        N = 0;
-      }
-      break;
-    case 3:
-      return_money_control();
-      if(timer1 > 50)
-      {
-        state = 0;
-        N = 0;
-      }
-      break;
+    }
+    else if (state == 3)
+    {
+        return_money_control();
+        if(timer >= 50)
+        {
+          N = 0;
+          state = 0;
+        }
+    }
+
 }
+  // switch(state)
+  // {
+  //   case 0:
+  //     if(coin_detected == 1)
+  //       state = 1;
+  //     if (N == 4)
+  //     {
+  //       state = 2;
+  //       timer1 = 0;
+  //     }
+  //     if (abort_request == 1)
+  //     {
+  //       state = 3;
+  //       timer1 = 0;
+  //     }
+
+  //     break;
+  //   case 1:
+  //     N++;
+  //     state = 0;
+  //     break;
+  //   case 2:
+  //     dispense_control();
+  //     if (timer1 > = 50)
+  //     {
+  //       state = 0;
+  //       N = 0;
+  //     }
+  //     break;
+  //   case 3:
+  //     return_money_control();
+  //     if(timer1 > 50)
+  //     {
+  //       state = 0;
+  //       N = 0;
+  //     }
+  //     break;
+  // }
+
 
 
 void timers(void)
@@ -95,7 +138,5 @@ waiting for user - iddle state    --> 0
 verify coin      - verify state   --> 1
 dispense product - dispense state --> 2
 return money     - abort state    --> 3
-
-
 
 */
