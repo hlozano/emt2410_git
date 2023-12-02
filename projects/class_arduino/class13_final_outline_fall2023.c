@@ -1,6 +1,6 @@
 
 #include <LiquidCrystal.h>
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 
 void update_lcd(void);
 void heartbeat(void);
@@ -38,17 +38,18 @@ unsigned long int update_lcd_timer;
 void setup() 
 {
   // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
+  //lcd.begin(16, 2);
   // Print a message to the LCD.
-  lcd.print("hello, world!");
+ // lcd.print("hello, world!");
   //INPUTS
-  pinMode(sensor_pin,INPUT);  
-  pinMode(open_signal_pin,INPUT);  
-  pinMode(closed_signal_pin,INPUT);  
+  pinMode(sensor_pin,INPUT_PULLUP);  
+  pinMode(open_signal_pin,INPUT_PULLUP);  
+  pinMode(closed_signal_pin,INPUT_PULLUP);  
   //OUTPUTS
   pinMode(LED_pin,OUTPUT);
   pinMode(open_output_pin,OUTPUT);
-  pinMode(open_output_pin,OUTPUT);
+  pinMode(close_output_pin,OUTPUT);
+    Serial.begin(9600);  
 }
 
 void loop()
@@ -91,58 +92,29 @@ void door_control(void)
   else if(door_state == 3)
   {
       //pending implementation
-
-  } 
-  /*
-
-
-  switch(door_state)
-  {
-      case 0:
-          motor_stop();
-          if(is_sensor_on() == 1)
-            door_state = 1;
-          break;      
-      case 1:
-          motor_drive_open();
-          if(is_door_open() == 1)
-          {
-              door_state = 2;
-              timer1 = 0;
-          }
-          break;
-      case 2:
-          motor_stop();
-          if(is_sensor_on() == 1)
-            timer1 = 0;
-
-          if(timer1 >= 50) //50 * 0.100 = 5s
-          {
-              door_state = 3;
-          }
-          break;
-      case 3:
-      //pending implementation
-          break;
-   }
-
-
-
-
-  */
+     motor_drive_close();
+     if(is_sensor_on() == 1)
+        door_state = 1;
+      if(is_door_closed() == 1)
+        door_state = 0;
+  }
 }
 
 void motor_drive_open(void)
 {
- //pending implementation
+ digitalWrite(open_output_pin,1);
+ digitalWrite(close_output_pin,0);
+  
 }
 void motor_drive_close(void)
 {
- //pending implementation
+ digitalWrite(open_output_pin,0);
+ digitalWrite(close_output_pin,1);
 }
 void motor_stop(void)
 {
-  //pending implementation
+ digitalWrite(open_output_pin,0);
+ digitalWrite(close_output_pin,0);
 }
 
 
@@ -151,7 +123,7 @@ void update_lcd(void)
   if(update_lcd_timer >= 5)
   {
     update_lcd_timer = 0;
-    //write something to the LCD
+    Serial.println(door_state);
   }
 }
 
@@ -170,22 +142,18 @@ void heartbeat(void)
 
 int is_sensor_on(void)
 {
-    /*if(digitalRead(sensor_pin) == 1)
-      return 1;
-    else
-      return 0;
-    */
-    return digitalRead(sensor_pin);
+   
+    return !digitalRead(sensor_pin);
 }
 int is_door_open(void)
-{ //pending implementation
-  //return value based on input for lab 5
+{ 
+   return !digitalRead(open_signal_pin);
 
 }
 
 int is_door_closed(void)
-{ //pending implementation
-  //return value based on input for lab 5
+{ 
+   return !digitalRead(closed_signal_pin);
 
 }
 
