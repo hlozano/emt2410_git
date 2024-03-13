@@ -33,4 +33,5 @@ int main()
         wait(1.0); // 1 sec
 */        
     }
+    return 1;
 }
