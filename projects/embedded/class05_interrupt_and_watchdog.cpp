@@ -1,42 +1,36 @@
+/*
+ * Copyright (c) 2020 Arm Limited and affiliates.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include "mbed.h"
 
-UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
-DigitalOut       led(LED1); 
+const uint32_t TIMEOUT_MS = 10000;
+InterruptIn button(BUTTON1);
+volatile int countdown = 9;
 
-// DigitalOut led(PA_5);
-// same effect as line before
-void print_available_commands(void);
+void trigger()
+{
+    Watchdog::get_instance().kick();
+    countdown = 9;
+}
 
 int main()
 {
-    while(1)
-    {
-        char c = '\0';
-        if(uartUsb.readable())
-        {
-            uartUsb.read(&c,1);
+    printf("\r\nTarget started.\r\n");
 
-            switch(c)
-            {
-                case '0':
-                    led = 0; // OFF
-                    break;
-                case '1':
-                    led = 1;// ON
-                    break; 
-                default:
-                     print_available_commands();
-                    break;
+    Watchdog &watchdog = Watchdog::get_instance();
+    watchdog.start(TIMEOUT_MS);
+    button.rise(&trigger);
 
-            }
+    uint32_t watchdog_timeout = watchdog.get_timeout();
+    printf("Watchdog initialized to %lu ms.\r\n", watchdog_timeout);
+    printf("Press BUTTON1 at least once every %lu ms to kick the "
+           "watchdog and prevent system reset.\r\n", watchdog_timeout);
 
-        }
-        
+    while (1) {
+        printf("\r%3i", countdown--);
+        fflush(stdout);
+        ThisThread::sleep_for(TIMEOUT_MS / 10);
     }
-
-    return 1;
-}
-void print_available_commands(void)
-{
-    uartUsb.write( "Press '1' to turn LED1 ON, '0' to turn it OFF\r\n",47);
 }
