@@ -1,5 +1,7 @@
 #include <avr/wdt.h>
-
+#include <Adafruit_LiquidCrystal.h>
+int hundred_milliseconds = 0;
+int seconds = 0;
 // global variables
 const int input_pin=12;
 // Common Cathode 7-segment pins
@@ -17,8 +19,9 @@ int system_state = 0;
 unsigned char c;
 unsigned long heartbeat_timer;
 unsigned long button_timer;
+unsigned long lcd_update_timer;
 
-
+Adafruit_LiquidCrystal lcd_1(0);
 
 void read_inputs(void);
 void heartbeat_led(void);
@@ -49,6 +52,13 @@ void setup()
   Serial.println("Press button to resume counter");
 
   wdt_enable(WDTO_120MS); //120ms
+  //lcd setup
+  lcd_1.begin(16, 2);
+  lcd_1.print("seconds=");
+  lcd_1.setCursor(0, 1);
+  lcd_1.print("system_state=");
+  
+  lcd_1.setBacklight(1);
 }
 
 void loop() 
@@ -69,6 +79,7 @@ void read_inputs(void)
 void control_led()
 {
   switch(system_state)
+  {
     case 0:
 
       break;
@@ -82,7 +93,7 @@ void control_led()
 
     default:
       system_state = 0;
-
+  }
 }
 void heartbeat_led()
 {
@@ -99,7 +110,22 @@ void control_seven_segment()
 
 }
 
+void lcd_update (void)
+{
+  if(lcd_update_timer >= 10)
+  {
+    lcd_update_timer = 0;
+   lcd_1.setCursor(13, 0);
+   lcd_1.print(seconds);    
+   lcd_1.setCursor(13, 1);
+   lcd_1.print(system_state);    
+  }
 
+}
+void send_status(void)
+{
+
+}
 
 void pet_dog(void)
 {
@@ -114,10 +140,14 @@ void timers(void)
   {//falling inside this if statement happens every "interval # of ms
     old_millis = millis();
 
-    led_timer++; //  same as timer = timer + 1;
+    heartbeat_timer++; //  same as timer = timer + 1;
     button_timer++;
-
+    hundred_milliseconds++;
+    lcd_update_timer++;
+    seconds = hundred_milliseconds / 10;
   }
+
+
 }
 
 void display_character_0(void)
@@ -167,3 +197,4 @@ void display_character_9(void)
   //to be completed by students
 }
 
+s

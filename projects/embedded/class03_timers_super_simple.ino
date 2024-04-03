@@ -158,7 +158,5 @@ void timers_2(void)
 		timer3++;
 		print_timer++;
 	}
-
-
 }
 

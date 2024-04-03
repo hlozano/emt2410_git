@@ -107,3 +107,8 @@ void timers(void)
 
   }
 }
+
+void send_status(void)
+{
+  //pending
+}
