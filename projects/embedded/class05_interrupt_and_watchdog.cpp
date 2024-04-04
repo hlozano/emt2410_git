@@ -9,7 +9,7 @@ const uint32_t TIMEOUT_MS = 10000;
 InterruptIn button(BUTTON1);
 volatile int countdown = 9;
 
-void trigger()
+void my_very_own_trigger_method()
 {
     Watchdog::get_instance().kick();
     countdown = 9;
@@ -20,8 +20,10 @@ int main()
     printf("\r\nTarget started.\r\n");
 
     Watchdog &watchdog = Watchdog::get_instance();
+
     watchdog.start(TIMEOUT_MS);
-    button.rise(&trigger);
+    
+    button.rise(&my_very_own_trigger_method);
 
     uint32_t watchdog_timeout = watchdog.get_timeout();
     printf("Watchdog initialized to %lu ms.\r\n", watchdog_timeout);

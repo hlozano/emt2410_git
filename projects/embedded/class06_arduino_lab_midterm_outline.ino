@@ -46,6 +46,7 @@ void display_character_9(void);
 void setup() 
 {
   pinMode(pin_DP, OUTPUT);
+  //init all output pins
   pinMode(input_pin,INPUT_PULLUP);
   Serial.begin(9600);
   Serial.println("midterm solution");
@@ -74,7 +75,7 @@ void loop()
 
 void read_inputs(void)
 {
- // read input.... and updage state variable
+ // read input.... and update state variable
 }
 void control_led()
 {
@@ -92,7 +93,7 @@ void control_led()
       break;
 
     default:
-      system_state = 0;
+      system_state = 0;s
   }
 }
 void heartbeat_led()
