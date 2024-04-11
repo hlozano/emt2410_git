@@ -6,6 +6,7 @@ unsigned long timer1; 			// timer1 is incremented every 100ms = 0.1s
 unsigned long heartbeat_timer;  // timer1 is incremented every 100ms = 0.1s
 
 void door_control(void);
+void motor_control(void);
 int is_door_closed(void);
 int is_door_open(void);
 int is_sensor_on(void);
@@ -73,9 +74,9 @@ void heartbeat()
 	}
 }
 
- void door_control(void)
+ void motor_control(void)
  {
- //pending implementation
+ //use the door state to command the door
  }
  int is_door_closed(void)
  {
