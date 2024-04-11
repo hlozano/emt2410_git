@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-void doublemyvalue(int  * var); 
+void double_my_value(int  * var); 
 
 int main(void) 
 {
@@ -14,7 +14,7 @@ int main(void)
 }
 
 
-void doublemyvalue(int * var)
+void double_my_value(int * var)
 {
    ( *var) = 2  * (* var);
 }
