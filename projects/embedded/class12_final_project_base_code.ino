@@ -1,30 +1,152 @@
+#include <Adafruit_LiquidCrystal.h>
+
 const int LED1 = 13;
+char lcd_buffer[16];
+int seconds = 0;
 
 int door_state = 0;
+int Door_is_open_pin = 8;
+int Door_is_closed_pin = 9;
+int Motion_detected_pin = 10;
+
+int Motor_open_pin = 6;
+int Motor_close_pin = 7;
+
+int ch_A_pin = 4;
+int ch_B_pin = 5;
+unsigned int encoder_pulses_state = 0; 
+unsigned char encoder_counts;
+
 
 unsigned long timer1; 			// timer1 is incremented every 100ms = 0.1s
 unsigned long heartbeat_timer;  // timer1 is incremented every 100ms = 0.1s
+unsigned long lcd_update_timer;
+
+Adafruit_LiquidCrystal lcd_1(0);
 
 void door_control(void);
-void motor_control(void);
+void motor_control(void);void timers(void);
+void lcd_init(void);
+void io_init(void);
+void lcd_update(void);
 int is_door_closed(void);
 int is_door_open(void);
 int is_sensor_on(void);
-int lcd_control(void);
-void timers(void)
+void encoder_read(void);
+
+
 void setup()
 {
-	//initilize inputs, memory, etc
+	io_init();
+	lcd_init();
 }
+
 
 void loop()
 {
 	timers();
 	heartbeat();
 	door_control();
-	lcd_control();
+	lcd_update();
+	encoder_read();
 }
 
+void encoder_read()
+{
+	int current_state = 0;
+	if((digitalRead(ch_B_pin) == 0) && (digitalRead(ch_A_pin) == 0))
+	{
+		current_state = 0;
+	} 
+	else if((digitalRead(ch_B_pin) == 0) && (digitalRead(ch_A_pin) == 1))
+	{
+		current_state = 1;
+	} 
+	else if((digitalRead(ch_B_pin) == 1) && (digitalRead(ch_A_pin) == 1))
+	{
+		current_state = 3;
+	} 
+	else if((digitalRead(ch_B_pin) == 1) && (digitalRead(ch_A_pin) == 0))
+	{
+		current_state = 2;
+	} 
+
+	if(current_state != encoder_pulses_state)
+	{
+		switch(encoder_pulses_state)
+		{
+			case 0:
+				if(current_state == 1)
+					encoder_counts++;
+				if(current_state == 2)
+					encoder_counts--;
+				break;
+
+			case 1:
+
+				break;
+			case 3:
+
+				break;			
+			case 2:
+
+				break;
+
+		}
+	}
+	
+	encoder_pulses_state = current_state;
+}
+
+void lcd_init()
+{
+  lcd_1.begin(16, 2);
+  lcd_1.print("hello world T=");
+}
+
+void io_init()
+{
+  pinMode(Door_is_open_pin, INPUT);
+  pinMode(Door_is_closed_pin, INPUT);
+  pinMode(Motion_detected_pin, INPUT);
+
+  pinMode(Motor_open_pin,OUTPUT);
+  pinMode(Motor_close_pin,OUTPUT);
+
+  //encoder signals
+	pinMode(ch_A_pin,INPUT);
+	pinMode(ch_B_pin,INPUT);
+
+ 
+}
+void lcd_update()
+{
+
+	if(lcd_update_timer >= 1)
+	{
+		lcd_update_timer = 0;
+		lcd_1.setCursor(0, 0);
+		sprintf(lcd_buffer,
+				"Door State = %d",
+				door_state);
+
+		lcd_1.print(lcd_buffer);
+		
+		lcd_1.setCursor(0, 1);
+		sprintf(lcd_buffer,
+				"O=%d | C=%d | X=%d",
+				is_door_open(),
+				is_door_closed(),
+				is_sensor_on());
+		
+		lcd_1.print(lcd_buffer);
+
+		lcd_1.setBacklight(1);
+		//lcd_1.setBacklight(0);
+		seconds += 1;		
+	}
+
+}
 void door_control(void)
 {
 	switch(door_state)
@@ -76,21 +198,58 @@ void heartbeat()
 
  void motor_control(void)
  {
- //use the door state to command the door
+
+ 	switch(door_state)
+ 	{
+	 	case 0:
+	 		digitalWrite(Motor_open_pin,0);
+	 		digitalWrite(Motor_close_pin,0);
+	 		break;
+	 	case 1:
+	 		digitalWrite(Motor_open_pin,1);
+	 		digitalWrite(Motor_close_pin,0);
+	 		break;
+	 	case 2:
+	 		digitalWrite(Motor_open_pin,0);
+	 		digitalWrite(Motor_close_pin,0);
+	 		break;
+	 	case 3:
+	 		digitalWrite(Motor_open_pin,0);
+	 		digitalWrite(Motor_close_pin,1);
+	 		break;
+	 	default:
+	 		digitalWrite(Motor_open_pin,0);
+	 		digitalWrite(Motor_close_pin,0);
+	 		break;
+
+
+
+ 	}
+ 	
  }
  int is_door_closed(void)
  {
- //pending implementation
+    return digitalRead(Door_is_closed_pin);
  }
  int is_door_open(void)
  {
- //pending implementation
+	return digitalRead(Door_is_open_pin);
  }
  int is_sensor_on(void)
  {
- //pending implementation
+	return digitalRead(Motion_detected_pin);
  }
- void timers(void)
+void timers(void)
 {
-	//pending implementation
+	static unsigned long old_millis = 0; //static means it never drops the contents of this variable
+	const int timers_interval = 100; // in ms
+
+	if(millis() >= old_millis + timers_interval) // 99.99% will not go in
+	{//falling inside this if statement happens every "interval # of ms
+		old_millis = millis();
+
+		timer1++; //  same as timer = timer + 1;
+		heartbeat_timer++;
+		lcd_update_timer++;
+	}
 }

@@ -1,9 +1,20 @@
+// C++ code
+//
+#include <Adafruit_LiquidCrystal.h>
+
 // timers is incremented every 100ms = 0.1s
 unsigned long heartbeat_timer;
 unsigned long update_encoder_timer_in_ms;
 unsigned long print_timer;
+unsigned long lcd_update_timer;
+
+int seconds = 0;
+
+Adafruit_LiquidCrystal lcd_1(0);
  
 void encoder_output(void);
+void lcd_init(void);
+void lcd_update(void);
 
 //define pins
 #define motor_M1 2
@@ -18,6 +29,7 @@ unsigned long encoder_pulse_duration_in_ms;
 
 void setup()
 {
+	lcd_init();
 	Serial.begin(9600); 
 	pinMode(motor_M1,INPUT);
 	pinMode(motor_M2,INPUT);
@@ -32,6 +44,27 @@ void loop()
 	heartbeat();
 	encoder_control();
 	encoder_output();
+	lcd_update();
+}
+
+
+void lcd_init()
+{
+	lcd_1.begin(16, 2);
+ 	lcd_1.print("hello world");
+}
+void lcd_update()
+{
+	if(lcd_update_timer >= 1)
+	{
+		lcd_update_timer = 0;
+		lcd_1.setCursor(0, 1);
+		lcd_1.print(seconds/10);
+		lcd_1.setBacklight(1);
+		//lcd_1.setBacklight(0);
+		seconds += 1;		
+	}
+
 }
 
 void encoder_control(void)
@@ -90,6 +123,7 @@ void timers(void)
 		one_ms_timer = 0;
 		heartbeat_timer++;
 		print_timer++;
+		lcd_update_timer;
 	}
 }
 
