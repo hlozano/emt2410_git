@@ -1,5 +1,7 @@
 #include <Adafruit_LiquidCrystal.h>
 
+#define ENCODER_FEEDBACK 1
+
 const int LED1 = 13;
 char lcd_buffer[16];
 int seconds = 0;
@@ -15,7 +17,7 @@ int Motor_close_pin = 7;
 int ch_A_pin = 4;
 int ch_B_pin = 5;
 unsigned int encoder_pulses_state = 0; 
-unsigned char encoder_counts;
+unsigned int encoder_counts;
 
 
 unsigned long timer1; 			// timer1 is incremented every 100ms = 0.1s
@@ -29,8 +31,10 @@ void motor_control(void);void timers(void);
 void lcd_init(void);
 void io_init(void);
 void lcd_update(void);
+
 int is_door_closed(void);
 int is_door_open(void);
+
 int is_sensor_on(void);
 void encoder_read(void);
 
@@ -47,6 +51,7 @@ void loop()
 	timers();
 	heartbeat();
 	door_control();
+ 	motor_control();
 	lcd_update();
 	encoder_read();
 }
@@ -81,14 +86,26 @@ void encoder_read()
 				if(current_state == 2)
 					encoder_counts--;
 				break;
-
 			case 1:
+				if(current_state == 3)
+					encoder_counts++;
 
+				if(current_state == 0)
+					encoder_counts--;
 				break;
 			case 3:
+				if(current_state == 2)
+					encoder_counts++;
+				if(current_state == 1)
+					encoder_counts--;
 
 				break;			
 			case 2:
+				if(current_state == 0)
+					encoder_counts++;
+				 if(current_state == 3)
+				 	encoder_counts--;
+
 
 				break;
 
@@ -127,17 +144,20 @@ void lcd_update()
 		lcd_update_timer = 0;
 		lcd_1.setCursor(0, 0);
 		sprintf(lcd_buffer,
-				"Door State = %d",
-				door_state);
+				"State=%d Enc=%d   ",
+				door_state,encoder_counts);
 
 		lcd_1.print(lcd_buffer);
 		
 		lcd_1.setCursor(0, 1);
 		sprintf(lcd_buffer,
-				"O=%d | C=%d | X=%d",
+				"Oi%dCi%d|X%d|Oo%dCo%d",
 				is_door_open(),
 				is_door_closed(),
-				is_sensor_on());
+				is_sensor_on(),
+                digitalRead(Motor_open_pin),
+                digitalRead(Motor_close_pin)
+                );
 		
 		lcd_1.print(lcd_buffer);
 
@@ -227,6 +247,20 @@ void heartbeat()
  	}
  	
  }
+
+
+#if (ENCODER_FEEDBACK == 1)
+
+ int is_door_closed(void)
+ {
+    return (encoder_counts <= 10);
+ }
+ int is_door_open(void)
+ {
+ 		return (encoder_counts >= 100);
+ }
+
+#else
  int is_door_closed(void)
  {
     return digitalRead(Door_is_closed_pin);
@@ -235,6 +269,9 @@ void heartbeat()
  {
 	return digitalRead(Door_is_open_pin);
  }
+#endif
+
+
  int is_sensor_on(void)
  {
 	return digitalRead(Motion_detected_pin);
@@ -253,3 +290,4 @@ void timers(void)
 		lcd_update_timer++;
 	}
 }
+sx

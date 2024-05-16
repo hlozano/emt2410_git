@@ -9,6 +9,7 @@ unsigned long print_timer;
 unsigned long lcd_update_timer;
 
 int seconds = 0;
+char lcd_buffer[16];
 
 Adafruit_LiquidCrystal lcd_1(0);
  
@@ -17,8 +18,8 @@ void lcd_init(void);
 void lcd_update(void);
 
 //define pins
-#define motor_M1 2
-#define motor_M2 3
+#define motor_M1 3
+#define motor_M2 2
 
 #define ch_A_pin 4
 #define ch_B_pin 5
@@ -26,6 +27,7 @@ void lcd_update(void);
 
 unsigned int encoder_state = 0; //0 = stop, 1 = UP, 2 = DOWN
 unsigned long encoder_pulse_duration_in_ms;
+unsigned char encoder_counts;
 
 void setup()
 {
@@ -51,17 +53,25 @@ void loop()
 void lcd_init()
 {
 	lcd_1.begin(16, 2);
- 	lcd_1.print("hello world");
+ 	lcd_1.print("hello!");
+
 }
 void lcd_update()
 {
 	if(lcd_update_timer >= 1)
 	{
 		lcd_update_timer = 0;
-		lcd_1.setCursor(0, 1);
-		lcd_1.print(seconds/10);
+		//lcd_1.setCursor(0, 14);
+		//lcd_1.print(seconds/10);
+		lcd_1.setCursor(0, 0);
+		sprintf(lcd_buffer,
+				"EncCnt=%d",
+				encoder_counts);
+
+		lcd_1.print(lcd_buffer);
+
 		lcd_1.setBacklight(1);
-		//lcd_1.setBacklight(0);
+	
 		seconds += 1;		
 	}
 
@@ -123,7 +133,7 @@ void timers(void)
 		one_ms_timer = 0;
 		heartbeat_timer++;
 		print_timer++;
-		lcd_update_timer;
+		lcd_update_timer++;
 	}
 }
 
@@ -141,11 +151,11 @@ void heartbeat(void)
 
 void encoder_output(void)
 {
-	static unsigned char encoder_counts;
+
 	static unsigned char encoder_pulses_state;
 
 	unsigned long MOTOR_RPM = 60;
-	unsigned long ENCDR_PPR = 20;
+	unsigned long ENCDR_PPR = 4;
 	//								1000 (ms)
 	encoder_pulse_duration_in_ms = (1000 * MOTOR_RPM) / 60 / ENCDR_PPR;
 	//
