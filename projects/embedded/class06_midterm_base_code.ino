@@ -13,9 +13,17 @@ unsigned long one_second_timer_helper;
 
 
 void init_lcd(void);
+void init_digital_pins(void);
+void init_serial_port(void);
+
+void read_inputs(void);
+void serial_port_debug(void);
 void timers(void);
-void init_serial_port();
-void serial_port_debug();
+void update_lcd(void)
+
+void dp_led_control(void);
+void seven_segment_control(void);
+
 
 
 int seconds = 0;
@@ -26,8 +34,22 @@ void setup()
 {
   init_lcd();
   init_serial_port();
+  init_digital_pins();
+  
 }
 
+void loop()
+{
+  update_lcd();
+  serial_port_debug(); 
+  read_inputs();
+  dp_led_control();
+  seven_segment_control();
+
+
+  timers();
+
+}
 
 void init_lcd(void)
 {
@@ -48,12 +70,6 @@ void update_lcd(void)
   }
 }
 
-void loop()
-{
-  update_lcd();
-  timers();
-  serial_port_debug();
-}
 
 
 void init_serial_port()
