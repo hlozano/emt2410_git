@@ -13,7 +13,7 @@ Ticker timers_interrupt;//name your interrupt
 
 unsigned int timer1; // dp LED timer used to blink dp in 7-segment
 unsigned int timer2; // timer used for up counter in 7-segment display
-
+unsigned int timer_lcd_update;
 
 
 //variable to control state of 7-segment display
@@ -24,6 +24,7 @@ unsigned int seven_segment_state; // 0,1,2,3,4,5,6,7,8,9,0,1,2...
 void init_function(void);
 void control_function(void);
 void dp_led_control(void);
+void lcd_update_control(void);
 void seven_segment_control(void);
 void timers(void);
 
@@ -35,6 +36,7 @@ int main(void)
         control_function(); // equivelant to arduino "loop()"
         dp_led_control();
         seven_segment_control();
+        lcd_update_control();
     }
     return 1;
 }
@@ -54,6 +56,15 @@ void control_function(void)
     else if(mybutton == 0)
     {//button is pressed
 
+    }
+}
+
+void lcd_update_control(void)
+{
+    if(timer_lcd_update >= 2)
+    {
+        timer_lcd_update = 0;
+        //CODE TO UPDATE THE LCD
     }
 }
 
@@ -117,5 +128,6 @@ void timers()
 {
     timer1++;
     timer2++;
+    timer_lcd_update++;
 }
 
